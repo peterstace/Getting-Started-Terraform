@@ -16,6 +16,10 @@ data "aws_ssm_parameter" "ami" {
   name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 ##################################################################################
 # RESOURCES
 ##################################################################################
@@ -35,9 +39,10 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "subnet1" {
-  cidr_block              = "10.0.0.0/24"
+  cidr_block              = var.vpc_subnets_cidr_block[0]
   vpc_id                  = aws_vpc.vpc.id
   map_public_ip_on_launch = true
+  availability_zone       = data.aws_availability_zones.available.names[0]
 
   tags = local.common_tags
 }
@@ -80,24 +85,6 @@ resource "aws_security_group" "nginx-sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = local.common_tags
-}
-
-# INSTANCES #
-resource "aws_instance" "nginx1" {
-  ami                    = nonsensitive(data.aws_ssm_parameter.ami.value)
-  instance_type          = var.ec2_instance_type
-  subnet_id              = aws_subnet.subnet1.id
-  vpc_security_group_ids = [aws_security_group.nginx-sg.id]
-
-  user_data = <<EOF
-#! /bin/bash
-sudo amazon-linux-extras install -y nginx1
-sudo service nginx start
-sudo rm /usr/share/nginx/html/index.html
-echo '<html><head><title>Taco Team Server</title></head><body style=\"background-color:#1F778D\"><p style=\"text-align: center;\"><span style=\"color:#FFFFFF;\"><span style=\"font-size:28px;\">You did it! Have a &#127790;</span></span></p></body></html>' | sudo tee /usr/share/nginx/html/index.html
-EOF
 
   tags = local.common_tags
 }
