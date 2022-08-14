@@ -1,7 +1,7 @@
 variable "naming_prefix" {
-  type = string
+  type        = string
   description = "Prefix for AWS resource names"
-  default = "globoweb"
+  default     = "globoweb"
 }
 
 variable "aws_region" {
@@ -22,9 +22,18 @@ variable "instance_count" {
   default     = 2
 }
 
-variable "company" { type = string }
-variable "project" { type = string }
-variable "billing_code" { type = string }
+variable "company" {
+  type    = string
+  default = "Globomantics"
+}
+variable "project" {
+  type    = string
+  default = "WebApp"
+}
+variable "billing_code" {
+  type    = string
+  default = "BILL"
+}
 
 variable "vpc_subnet_count" {
   type        = number
