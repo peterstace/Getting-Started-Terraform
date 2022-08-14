@@ -1,5 +1,5 @@
 locals {
-  bucket_name = "globo-web-app-${random_integer.rand.result}"
+  bucket_name = lower("${local.name_prefix}-${random_integer.rand.result}")
 }
 ## aws_s3_bucket
 resource "aws_s3_bucket" "b" {

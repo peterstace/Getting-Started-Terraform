@@ -13,5 +13,8 @@ resource "aws_instance" "nginx" {
     "${path.module}/startup_script.tpl",
     {s3_bucket_name = aws_s3_bucket.b.id},
   )
-  tags = local.common_tags
+
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-nginx-${count.index}"
+  })
 }

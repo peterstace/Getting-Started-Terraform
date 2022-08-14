@@ -1,3 +1,9 @@
+variable "naming_prefix" {
+  type = string
+  description = "Prefix for AWS resource names"
+  default = "globoweb"
+}
+
 variable "aws_region" {
   type        = string
   description = "AWS Region to use for resources"

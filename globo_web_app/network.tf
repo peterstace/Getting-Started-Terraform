@@ -19,13 +19,17 @@ resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-vpc"
+  })
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-igw"
+  })
 }
 
 resource "aws_subnet" "subnets" {
@@ -35,7 +39,9 @@ resource "aws_subnet" "subnets" {
   map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.available.names[count.index]
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-subnet-${count.index}"
+  })
 }
 
 # ROUTING #
@@ -47,7 +53,9 @@ resource "aws_route_table" "rtb" {
     gateway_id = aws_internet_gateway.igw.id
   }
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-rtb"
+  })
 }
 
 resource "aws_route_table_association" "rta-subnets" {
@@ -59,7 +67,7 @@ resource "aws_route_table_association" "rta-subnets" {
 # SECURITY GROUPS #
 # Nginx security group 
 resource "aws_security_group" "nginx-sg" {
-  name   = "nginx_sg"
+  name   = "${local.name_prefix}-nginx_sg"
   vpc_id = aws_vpc.vpc.id
 
   # HTTP access from anywhere
@@ -82,7 +90,7 @@ resource "aws_security_group" "nginx-sg" {
 }
 
 resource "aws_security_group" "alb_sg" {
-  name   = "nginx_alb_sg"
+  name   = "${local.name_prefix}-nginx_alb_sg"
   vpc_id = aws_vpc.vpc.id
 
   # HTTP access from anywhere
