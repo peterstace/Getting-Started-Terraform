@@ -9,15 +9,9 @@ resource "aws_instance" "nginx" {
   iam_instance_profile        = aws_iam_instance_profile.nginx_profile.name
   depends_on                  = [aws_iam_role_policy.allow_s3_all]
 
-  user_data = <<EOF
-#! /bin/bash
-sudo amazon-linux-extras install -y nginx1
-sudo service nginx start
-sudo rm /usr/share/nginx/html/index.html
-for f in index.html Globo_logo_Vert.png; do
-  sudo aws s3 cp s3://${aws_s3_bucket.b.bucket}/website/$f /usr/share/nginx/html/$f
-done
-EOF
-
+  user_data = templatefile(
+    "${path.module}/startup_script.tpl",
+    {s3_bucket_name = aws_s3_bucket.b.id},
+  )
   tags = local.common_tags
 }
