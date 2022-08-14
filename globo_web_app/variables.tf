@@ -10,8 +10,8 @@ variable "ec2_instance_type" {
   default     = "t2.micro"
 }
 
-variable "company"      { type = string }
-variable "project"      { type = string }
+variable "company" { type = string }
+variable "project" { type = string }
 variable "billing_code" { type = string }
 
 variable "vpc_subnets_cidr_block" {
