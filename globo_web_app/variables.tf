@@ -24,15 +24,14 @@ variable "instance_count" {
 
 variable "company" {
   type    = string
-  default = "Globomantics"
 }
+
 variable "project" {
   type    = string
-  default = "WebApp"
 }
+
 variable "billing_code" {
   type    = string
-  default = "BILL"
 }
 
 variable "vpc_subnet_count" {
