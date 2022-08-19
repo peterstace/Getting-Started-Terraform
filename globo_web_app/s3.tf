@@ -4,10 +4,10 @@ locals {
 }
 
 module "s3_bucket" {
-  source = "./modules/globo-web-app-s3"
-  bucket_name = lower("${local.name_prefix}-${random_integer.rand.result}")
+  source                  = "./modules/globo-web-app-s3"
+  bucket_name             = lower("${local.name_prefix}-${random_integer.rand.result}")
   elb_service_account_arn = data.aws_elb_service_account.root.arn
-  common_tags = local.common_tags
+  common_tags             = local.common_tags
 
 }
 

@@ -44,7 +44,7 @@ resource "aws_s3_bucket" "b" {
 
 ## aws_iam_role
 resource "aws_iam_role" "allow_nginx_s3" {
-  name = "allow_nginx_s3"
+  name_prefix = "allow_nginx_s3"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -60,8 +60,8 @@ resource "aws_iam_role" "allow_nginx_s3" {
 
 ## aws_iam_role_policy
 resource "aws_iam_role_policy" "allow_s3_all" {
-  name = "allow_s3_all"
-  role = aws_iam_role.allow_nginx_s3.id
+  name_prefix = "allow_s3_all"
+  role        = aws_iam_role.allow_nginx_s3.id
 
   policy = <<EOF
 {
@@ -84,7 +84,7 @@ EOF
 
 ## aws_instance_profile
 resource "aws_iam_instance_profile" "nginx_profile" {
-  name = "nginx_profile"
-  role = aws_iam_role.allow_nginx_s3.name
-  tags = var.common_tags
+  name_prefix = "nginx_profile"
+  role        = aws_iam_role.allow_nginx_s3.name
+  tags        = var.common_tags
 }

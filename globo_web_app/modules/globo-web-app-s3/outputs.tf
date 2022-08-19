@@ -1,6 +1,6 @@
 # Bucket Object
 output "web_bucket" {
-  value =  aws_s3_bucket.b
+  value = aws_s3_bucket.b
 }
 
 

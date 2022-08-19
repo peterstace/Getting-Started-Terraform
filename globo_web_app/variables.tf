@@ -11,37 +11,33 @@ variable "aws_region" {
 }
 
 variable "ec2_instance_type" {
-  type        = string
+  type        = map(string)
   description = "The EC2 instance type to use"
-  default     = "t2.micro"
 }
 
 variable "instance_count" {
-  type        = number
+  type        = map(number)
   description = "The number of EC2 instances to create"
-  default     = 2
 }
 
 variable "company" {
-  type    = string
+  type = string
 }
 
 variable "project" {
-  type    = string
+  type = string
 }
 
 variable "billing_code" {
-  type    = string
+  type = string
 }
 
 variable "vpc_subnet_count" {
-  type        = number
+  type        = map(number)
   description = "Number of VPC Subnets to create"
-  default     = 2
 }
 
 variable "vpc_cidr_block" {
-  type        = string
+  type        = map(string)
   description = "Base CIDR Block for VPC"
-  default     = "10.0.0.0/16"
 }
